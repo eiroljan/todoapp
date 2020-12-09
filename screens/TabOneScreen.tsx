@@ -1,32 +1,100 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import data from '../Tempdata';
+import { StyleSheet,View,StatusBar,Modal,Text} from 'react-native';
+import Searchbar from '../components/searchbar';
+import TodoList from '../components/TodoList';
+import AddTodoList from '../components/Modal';
+import fire from '../firebase/firebaseapi';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+export default class TabOneScreen extends React.Component {
+  state={
+    addTodoVisible:false
+  };
+  toggleAddTodoModal(){
+    this.setState({addTodoVisible: !this.state.addTodoVisible});
+  }
+  componentDidMount(){
 
-export default function TabOneScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.js" />
+  }
+
+
+
+  render(){
+    return (
+      <View style={styles.container}>
+      <Searchbar/>
+      <View style={styles.header}>
+      <TouchableOpacity style={styles.touch}>
+        <Modal animationType='slide' 
+               visible={this.state.addTodoVisible} 
+               onRequestClose={() => this.toggleAddTodoModal()}>
+               <AddTodoList closeModal={() => this.toggleAddTodoModal()}/>
+        </Modal>
+      </TouchableOpacity>
+      <View>
+      <Text style={styles.button} onPress={() => this.toggleAddTodoModal()}>
+                  Add Button
+      </Text>
+      </View>
+      </View>
+      
+      
+      
+
+    <View style={styles.footer}>
+    <FlatList data={data}
+              keyExtractor={item => item.name}
+              renderItem={({item}) => 
+              (<TodoList list={item}/>)}
+    />
+     
+    
     </View>
+    </View>
+    
   );
+  
+}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container:{
+    marginTop: StatusBar.currentHeight,
+    paddingHorizontal: 15,
+   
+  },
+  header:{
+    height:200,
+    width:'auto',
+  },
+  task:{
+    fontSize:24,
+  },
+  footer:{
+    height:250,
+    padding:20,
+    margin:5,
+    flexDirection:"row",
+    backgroundColor:'#565967',
+    borderRadius:15,
+   
+  },
+  lists:{
+    color:'white',
+  },
+  touch:{
+    justifyContent:'center',
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop:50,
+    backgroundColor:'white',
+    borderWidth:1,
+    borderStyle:'solid',
+    color:'white',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  button:{
+    color:'white',
+    textAlign:'center'
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+  
+})
