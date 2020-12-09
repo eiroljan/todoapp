@@ -2,6 +2,8 @@ import React from 'react';
 import {View,Text,StyleSheet,TouchableOpacity} from 'react-native';
 
 
+
+
 const TodoList  = ({list}) => {
     return (
       <TouchableOpacity style={styles.container}>
@@ -11,6 +13,7 @@ const TodoList  = ({list}) => {
       </TouchableOpacity>
     )
 }
+
 
 const styles = StyleSheet.create({
 listContainer:{
@@ -34,7 +37,5 @@ listContainer:{
         margin:10,
   }
 })
-
 export default TodoList;
-
 

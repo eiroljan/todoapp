@@ -1,26 +1,60 @@
 import React from 'react';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import data from '../Tempdata';
-import { StyleSheet,View,StatusBar,Modal,Text} from 'react-native';
+import { StyleSheet,View,StatusBar,Modal,Text,ActivityIndicator} from 'react-native';
 import Searchbar from '../components/searchbar';
 import TodoList from '../components/TodoList';
 import AddTodoList from '../components/Modal';
-import fire from '../firebase/firebaseapi';
+import fire from '../fire';
 
 export default class TabOneScreen extends React.Component {
   state={
-    addTodoVisible:false
+    addTodoVisible:false,
+    user:{},
+    loading:true,
   };
   toggleAddTodoModal(){
     this.setState({addTodoVisible: !this.state.addTodoVisible});
   }
   componentDidMount(){
+    firebase = new fire((error,user) => {
+      if(error){
+        return alert("something went wrong")
+      }
+    
+      firebase.getLists(lists => {
+        this.setState({lists,user}, () => {
+          this.setState({loading:false})
+        });
+      });
 
+      this.setState({user});
+    });
   }
-
-
+ 
+renderList = list => {
+  return <TodoList list={list} updateList={this.updateList}/>;
+};
+addList = list => {
+  this.setState({lists:[...this.state.lists,{...list, id: this.state.lists.length + 1, todos:[]} ]})
+};
+updateList = list => {
+  this.setState({
+    lists: this.state.lists.map(item =>{
+      return item.id === list.id ? list : item;
+    })
+  })
+}
 
   render(){
+    {/*if(this.state.loading){
+      return(
+        <View style={styles.container}>
+          <ActivityIndicator size='large' color='blue'/>
+        </View>
+
+      )
+    }*/}
     return (
       <View style={styles.container}>
       <Searchbar/>
@@ -29,8 +63,11 @@ export default class TabOneScreen extends React.Component {
         <Modal animationType='slide' 
                visible={this.state.addTodoVisible} 
                onRequestClose={() => this.toggleAddTodoModal()}>
-               <AddTodoList closeModal={() => this.toggleAddTodoModal()}/>
+               <AddTodoList closeModal={() => this.toggleAddTodoModal()} addList={this.addList}/>
         </Modal>
+        <View>
+    <Text>User: {this.state.user.uid}</Text>
+        </View>
       </TouchableOpacity>
       <View>
       <Text style={styles.button} onPress={() => this.toggleAddTodoModal()}>
@@ -43,10 +80,11 @@ export default class TabOneScreen extends React.Component {
       
 
     <View style={styles.footer}>
-    <FlatList data={data}
+    <FlatList data={this.state.lists}
               keyExtractor={item => item.name}
+              keyboardShouldPersistTaps='always'
               renderItem={({item}) => 
-              (<TodoList list={item}/>)}
+              this.renderList(item)}
     />
      
     

@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#476472"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,9 +24,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#476472"
       },
-      "package": "Pahinumdom_ver_0_1.apk"
+      "package": "Pahinumdom_ver_0_2.apk"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

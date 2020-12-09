@@ -9,9 +9,10 @@ export default class AddTodoList extends Component {
     createTodo = () => {
         const {name} = this.state
 
-        tempData.push({
-            name,
-        })
+       const list = {name}
+       this.props.addList(list);
+       this.setState({name:""});
+       this.props.closeModal();
     }
     render() {
         return (
