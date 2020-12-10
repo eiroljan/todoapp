@@ -12,6 +12,7 @@ export default class TabOneScreen extends React.Component {
     addTodoVisible:false,
     user:{},
     loading:true,
+    lists: data,
   };
   toggleAddTodoModal(){
     this.setState({addTodoVisible: !this.state.addTodoVisible});
@@ -22,21 +23,25 @@ export default class TabOneScreen extends React.Component {
         return alert("something went wrong")
       }
     
-      firebase.getLists(lists => {
-        this.setState({lists,user}, () => {
+      firebase.getLists(list => {
+        this.setState({list,user}, () => {
           this.setState({loading:false})
         });
       });
 
       this.setState({user});
     });
+    
   }
+  
  
 renderList = list => {
   return <TodoList list={list} updateList={this.updateList}/>;
+  
 };
 addList = list => {
-  this.setState({lists:[...this.state.lists,{...list, id: this.state.lists.length + 1, todos:[]} ]})
+  this.setState({lists:[...this.state.lists,{...list, id: this.state.lists.length + 1} ]})
+  
 };
 updateList = list => {
   this.setState({
@@ -47,14 +52,6 @@ updateList = list => {
 }
 
   render(){
-    {/*if(this.state.loading){
-      return(
-        <View style={styles.container}>
-          <ActivityIndicator size='large' color='blue'/>
-        </View>
-
-      )
-    }*/}
     return (
       <View style={styles.container}>
       <Searchbar/>

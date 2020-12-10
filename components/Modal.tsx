@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet,View,KeyboardAvoidingView,TouchableOpacity,TextInput } from 'react-native';
 import {AntDesign} from '@expo/vector-icons';
+import data from '../Tempdata';
+
 
 export default class AddTodoList extends Component {
     state ={
         name:"",
     }
     createTodo = () => {
-        const {name} = this.state
+      const {name} = this.state
+
 
        const list = {name}
+
        this.props.addList(list);
+
        this.setState({name:""});
        this.props.closeModal();
     }
@@ -22,9 +27,11 @@ export default class AddTodoList extends Component {
                </TouchableOpacity>
                <View style={{alignSelf:'stretch',marginHorizontal:32}}>
                    <Text style = {styles.title}>create todo list</Text>
-                    <TextInput style={styles.input} placeholder='Title' onChangeText={text => this.setState({name: text})}/>
+                    <TextInput style={styles.input} 
+                                placeholder='Title' 
+                                onChangeText={text => this.setState({name: text})}/>
 
-                    <TouchableOpacity style={[styles.create,{backgroundColor:'blue'}]}>
+                    <TouchableOpacity style={[styles.create,{backgroundColor:'blue'}]} onPress={this.createTodo}>
                         <Text style={{color:'white', fontWeight:'600'}}>
                             Create!
                         </Text>
